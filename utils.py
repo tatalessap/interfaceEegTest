@@ -4,11 +4,12 @@ import time
 import random
 from PIL import ImageTk, Image
 
-
 def interface(list_classes_ut, list_class_original, list_file, list_time, df, time_to_refresh, tick):
+    # create window
     window = Tk()
     window.title("Pay attention")
 
+    # insert first image
     row = df.loc[random.randint(0, len(df)), :]
     f = row['name_file']
     cl = row['class']
@@ -16,24 +17,28 @@ def interface(list_classes_ut, list_class_original, list_file, list_time, df, ti
     # open the image
     path_img = str(('all_image/' + f))
     img = Image.open(path_img)
-    img = img.resize((250, 250))
+    img = img.resize((300, 300))
     img = ImageTk.PhotoImage(img)
 
+    # organizer the interface (grid etc)
     panel = Label(window, image=img)
     panel.grid(column=0, row=0, columnspan=3)
 
     lbl2 = Label(window, text="what animal do you see?")
     lbl2.grid(column=0, row=2)
 
+    # to save the value of "clicked"
     selected = StringVar()
 
     def clicked():
+        # update of the lists for the new data (annotation)
         print(selected.get())
         list_classes_ut.append(selected.get())
         list_class_original.append(cl)
         list_file.append(f)
         list_time.append((time.time() - tick) / 60)
 
+    # buttons
     scoiattolo_radioB = Radiobutton(window, text='scoiattolo', value='scoiattolo', variable=selected, command=clicked)
 
     cane_radioB = Radiobutton(window, text='cane', value='cane', variable=selected, command=clicked)
@@ -53,8 +58,6 @@ def interface(list_classes_ut, list_class_original, list_file, list_time, df, ti
     mucca_radioB = Radiobutton(window, text='mucca', value='mucca', variable=selected, command=clicked)
 
     gallina_radioB = Radiobutton(window, text='gallina', value='gallina', variable=selected, command=clicked)
-
-    # pos
 
     scoiattolo_radioB.grid(column=0, row=3, sticky=W)
 
@@ -76,6 +79,27 @@ def interface(list_classes_ut, list_class_original, list_file, list_time, df, ti
 
     gallina_radioB.grid(column=1, row=7, sticky=W)
 
-    window.after(time_to_refresh, window.destroy)
+    # end buttons
 
+    def call_back():
+        img2 = ImageTk.PhotoImage(Image.open('black.jpg').resize((250, 250)))
+        panel.configure(image=img2)
+        panel.image = img2
+
+    # to change image
+    def change_image():
+        row = df.loc[random.randint(0, len(df)), :]
+        f = row['name_file']
+        cl = row['class']
+
+        # open the image
+        path_img = str(('all_image/' + f))
+        img = Image.open(path_img)
+        img = ImageTk.PhotoImage(img.resize((250, 250)))
+        panel.configure(image=img)
+        panel.image = img
+        window.after(time_to_refresh, change_image)
+
+    change_image()
+    
     window.mainloop()
