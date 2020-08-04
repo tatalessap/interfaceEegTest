@@ -18,7 +18,7 @@ for i in range(1, 10):
     interface(list_classes_ut, list_class_original, list_file, list_time, df, 6000, tick)
 """
 
-interface(list_classes_ut, list_class_original, list_file, list_time, df, 2000, tick)
+interface(list_classes_ut, list_class_original, list_file, list_time, df, 3000, 1000, tick)
 
 df_data = pd.DataFrame(list_classes_ut, columns=['class by user'])
 df_data['original class'] = list_class_original

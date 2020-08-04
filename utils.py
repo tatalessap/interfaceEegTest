@@ -4,7 +4,7 @@ import time
 import random
 from PIL import ImageTk, Image
 
-def interface(list_classes_ut, list_class_original, list_file, list_time, df, time_to_refresh, tick):
+def interface(list_classes_ut, list_class_original, list_file, list_time, df, time_to_refresh, time_to_black, tick):
     # create window
     window = Tk()
     window.title("Pay attention")
@@ -17,6 +17,7 @@ def interface(list_classes_ut, list_class_original, list_file, list_time, df, ti
     # open the image
     path_img = str(('all_image/' + f))
     img = Image.open(path_img)
+    img2 = ImageTk.PhotoImage(Image.open('black.jpg').resize((250, 250)))
     img = img.resize((300, 300))
     img = ImageTk.PhotoImage(img)
 
@@ -98,8 +99,9 @@ def interface(list_classes_ut, list_class_original, list_file, list_time, df, ti
         img = ImageTk.PhotoImage(img.resize((250, 250)))
         panel.configure(image=img)
         panel.image = img
+        window.after(time_to_black, call_back)
         window.after(time_to_refresh, change_image)
 
     change_image()
-    
+
     window.mainloop()
