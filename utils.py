@@ -4,20 +4,17 @@ import time
 import random
 from PIL import ImageTk, Image
 
-def interface(list_classes_ut, list_class_original, list_file, list_time, df, time_to_refresh, time_to_black, tick):
+
+def interface(list_classes_user, list_class_original, list_file, list_time, df, time_to_refresh, time_to_black, tick):
     # create window
     window = Tk()
     window.title("Pay attention")
 
     # insert first image
-    row = df.loc[random.randint(0, len(df)), :]
-    f = row['name_file']
-    cl = row['class']
 
     # open the image
-    path_img = str(('all_image/' + f))
-    img = Image.open(path_img)
-    img2 = ImageTk.PhotoImage(Image.open('black.jpg').resize((250, 250)))
+    img = Image.open("black.jpg")
+    img2 = ImageTk.PhotoImage(Image.open('black.jpg').resize((300, 300)))
     img = img.resize((300, 300))
     img = ImageTk.PhotoImage(img)
 
@@ -28,15 +25,14 @@ def interface(list_classes_ut, list_class_original, list_file, list_time, df, ti
     lbl2 = Label(window, text="what animal do you see?")
     lbl2.grid(column=0, row=2)
 
+
     # to save the value of "clicked"
     selected = StringVar()
 
     def clicked():
         # update of the lists for the new data (annotation)
         print(selected.get())
-        list_classes_ut.append(selected.get())
-        list_class_original.append(cl)
-        list_file.append(f)
+        list_classes_user.append(selected.get())
         list_time.append((time.time() - tick) / 60)
 
     # buttons
@@ -89,6 +85,13 @@ def interface(list_classes_ut, list_class_original, list_file, list_time, df, ti
 
     # to change image
     def change_image():
+        print(len(list_classes_user))
+        print(len(list_class_original))
+        if len(list_class_original) != len(list_classes_user):
+            print('none')
+            list_classes_user.append('None')
+            list_time.append((time.time() - tick) / 60)
+
         row = df.loc[random.randint(0, len(df)), :]
         f = row['name_file']
         cl = row['class']
@@ -99,9 +102,16 @@ def interface(list_classes_ut, list_class_original, list_file, list_time, df, ti
         img = ImageTk.PhotoImage(img.resize((250, 250)))
         panel.configure(image=img)
         panel.image = img
+        list_class_original.append(cl)
+        list_file.append(f)
+
         window.after(time_to_black, call_back)
+
+        print("change image")
+
         window.after(time_to_refresh, change_image)
 
     change_image()
 
     window.mainloop()
+
