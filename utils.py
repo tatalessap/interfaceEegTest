@@ -6,7 +6,7 @@ from PIL import ImageTk, Image
 
 
 def interface(list_classes_user, list_class_original, list_file, list_time, df, time_to_refresh, time_to_black, tick):
-    # create window
+    # create window<
     window = Tk()
     window.title("Pay attention")
 
@@ -92,24 +92,27 @@ def interface(list_classes_user, list_class_original, list_file, list_time, df, 
             list_classes_user.append('None')
             list_time.append((time.time() - tick) / 60)
 
-        row = df.loc[random.randint(0, len(df)), :]
-        f = row['name_file']
-        cl = row['class']
+        if len(list_class_original) == 10:
+            window.destroy()
+        else:
+            row = df.loc[random.randint(0, len(df)), :]
+            f = row['name_file']
+            cl = row['class']
 
-        # open the image
-        path_img = str(('all_image/' + f))
-        img = Image.open(path_img)
-        img = ImageTk.PhotoImage(img.resize((250, 250)))
-        panel.configure(image=img)
-        panel.image = img
-        list_class_original.append(cl)
-        list_file.append(f)
+            # open the image
+            path_img = str(('all_image/' + f))
+            img = Image.open(path_img)
+            img = ImageTk.PhotoImage(img.resize((250, 250)))
+            panel.configure(image=img)
+            panel.image = img
+            list_class_original.append(cl)
+            list_file.append(f)
 
-        window.after(time_to_black, call_back)
+            window.after(time_to_black, call_back)
 
-        print("change image")
+            print("change image")
 
-        window.after(time_to_refresh, change_image)
+            window.after(time_to_refresh, change_image)
 
     change_image()
 
