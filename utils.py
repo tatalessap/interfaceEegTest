@@ -7,7 +7,6 @@ from datetime import datetime
 from operator import *
 from tkinter import font
 
-
 def annotate(df, col_name_file, col_class, path_folder_img, time_to_refresh):
     """
     List to create the new csv file
@@ -17,8 +16,7 @@ def annotate(df, col_name_file, col_class, path_folder_img, time_to_refresh):
     list_file = []
     list_time = []
 
-    interface(list_classes_user, list_class_original, list_file, list_time, df, col_name_file, col_class,
-              path_folder_img, time_to_refresh)
+    interface(list_classes_user, list_class_original, list_file, list_time, df, col_name_file, col_class, path_folder_img, time_to_refresh)
 
     df_data = pd.DataFrame(list_classes_user, columns=['class by user'])
     df_data['original class'] = list_class_original
@@ -27,9 +25,7 @@ def annotate(df, col_name_file, col_class, path_folder_img, time_to_refresh):
 
     df_data.to_csv("prova.csv")
 
-
-def interface(list_classes_user, list_class_original, list_file, list_time, df, col_name_file, col_class,
-              path_folder_img, time_to_refresh):
+def interface(list_classes_user, list_class_original, list_file, list_time, df, col_name_file, col_class, path_folder_img, time_to_refresh):
     list_time_during_experiment = []
     # id of the visualize image thread
     jobs_id = []
@@ -52,7 +48,6 @@ def interface(list_classes_user, list_class_original, list_file, list_time, df, 
     """
     The action of clicked the button about a label
     """
-
     def clicked():
         # update of the lists for the new data (annotation)
         # if you have already selected, the annotate doesn't save
@@ -69,15 +64,12 @@ def interface(list_classes_user, list_class_original, list_file, list_time, df, 
         for id in jobs_id:
             window.after_cancel(id)
 
-    get_radio_button(window, selected, clicked,
-                     labels=['computerroom', 'movietheater', 'library', 'kitchen', 'bowling', 'poolinside',
-                             'trainstation', 'greenhouse'])
+    get_radio_button(window, selected, clicked, labels = ['computerroom', 'movietheater', 'library', 'kitchen', 'bowling', 'poolinside', 'trainstation', 'greenhouse'])
 
     """
     - To change the image
     - check how many image display
     """
-
     def change_image():
         print("start change image")
         print(datetime.now())
@@ -111,8 +103,8 @@ def get_radio_button(window, selected, clicked, labels):
     i = 0
     pos_col = 3
     for l in labels:
-        b = Radiobutton(window, text=l, variable=selected, bg='#BBDEF0', font="System 18 bold", value=l,
-                        command=clicked)
+        b = Radiobutton(window, text=l, variable=selected, bg='#BBDEF0', font="System 18 bold", value=l, command=clicked)
+        tempo = 0
 
         if mod(i, 2) == 0:
             b.grid(column=0, row=pos_col, sticky=W)
