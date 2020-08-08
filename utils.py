@@ -7,6 +7,7 @@ from datetime import datetime
 from operator import *
 from tkinter import font
 
+
 def annotate(df, col_name_file, col_class, path_folder_img, time_to_refresh):
     """
     List to create the new csv file
@@ -16,7 +17,8 @@ def annotate(df, col_name_file, col_class, path_folder_img, time_to_refresh):
     list_file = []
     list_time = []
 
-    interface(list_classes_user, list_class_original, list_file, list_time, df, col_name_file, col_class, path_folder_img, time_to_refresh)
+    interface(list_classes_user, list_class_original, list_file, list_time, df, col_name_file, col_class,
+              path_folder_img, time_to_refresh)
 
     df_data = pd.DataFrame(list_classes_user, columns=['class by user'])
     df_data['original class'] = list_class_original
@@ -25,13 +27,17 @@ def annotate(df, col_name_file, col_class, path_folder_img, time_to_refresh):
 
     df_data.to_csv("prova.csv")
 
-def interface(list_classes_user, list_class_original, list_file, list_time, df, col_name_file, col_class, path_folder_img, time_to_refresh):
-    list_time_during_experiment = []
 
-    # create window<
+def interface(list_classes_user, list_class_original, list_file, list_time, df, col_name_file, col_class,
+              path_folder_img, time_to_refresh):
+    list_time_during_experiment = []
+    # id of the visualize image thread
+    jobs_id = []
+
+    # create window
     window = Tk()
-    #629677
-    window['bg']='#BBDEF0'
+    # change color
+    window['bg'] = '#BBDEF0'
     window.title("Pay attention")
 
     panel = Label(window)
@@ -43,29 +49,38 @@ def interface(list_classes_user, list_class_original, list_file, list_time, df, 
     # to save the value of "clicked"
     selected = StringVar()
 
+    """
+    The action of clicked the button about a label
+    """
+
     def clicked():
         # update of the lists for the new data (annotation)
         # if you have already selected, the annotate doesn't save
         if len(list_class_original) - len(list_classes_user) == 1:
+            # save the data
             list_classes_user.append(selected.get())
             list_time.append(datetime.now())
-            img = ImageTk.PhotoImage(Image.open('black.jpg').resize((800, 800)))
-            panel.configure(image=img)
-            panel.image = img
+            # cancel the thread/open image
+            cancel()
+            # open new image
+            jobs_id.append(window.after(0, change_image))
 
-    get_radio_button(window, selected, clicked, labels = ['computerroom', 'movietheater', 'library', 'kitchen', 'bowling', 'poolinside', 'trainstation', 'greenhouse'])
+    def cancel():
+        for id in jobs_id:
+            window.after_cancel(id)
+
+    get_radio_button(window, selected, clicked,
+                     labels=['computerroom', 'movietheater', 'library', 'kitchen', 'bowling', 'poolinside',
+                             'trainstation', 'greenhouse'])
+
+    """
+    - To change the image
+    - check how many image display
+    """
 
     def change_image():
         print("start change image")
-        list_time_during_experiment.append(datetime.now())
         print(datetime.now())
-
-        if len(list_time) != 0:
-            s = (list_time_during_experiment[-1].second - list_time[-1].second)
-        else:
-            s = 0
-
-        print("tempo da aggiungere" + str(s))
 
         """Check if the user annotated the last label, if not annotate none"""
         if len(list_class_original) != len(list_classes_user):
@@ -86,10 +101,9 @@ def interface(list_classes_user, list_class_original, list_file, list_time, df, 
             panel.configure(image=img)
             panel.image = img
 
-            window.after(time_to_refresh, change_image)
+            jobs_id.append(window.after(time_to_refresh, change_image))
 
     change_image()
-    #font = ft.Font(root=window, size=30, weight="normal")
     window.mainloop()
 
 
@@ -97,7 +111,8 @@ def get_radio_button(window, selected, clicked, labels):
     i = 0
     pos_col = 3
     for l in labels:
-        b = Radiobutton(window, text=l, variable=selected, bg='#BBDEF0', font="System 18 bold", value=l, command=clicked)
+        b = Radiobutton(window, text=l, variable=selected, bg='#BBDEF0', font="System 18 bold", value=l,
+                        command=clicked)
 
         if mod(i, 2) == 0:
             b.grid(column=0, row=pos_col, sticky=W)
