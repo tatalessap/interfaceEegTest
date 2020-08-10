@@ -23,10 +23,9 @@ def annotate(df, col_name_file, col_class, path_folder_img, time_to_refresh):
     df_data['file name'] = list_file
     df_data['check time'] = list_time
 
-    df_data.to_csv("prova.csv")
+    df_data.to_csv("experiment.csv")
 
 def interface(list_classes_user, list_class_original, list_file, list_time, df, col_name_file, col_class, path_folder_img, time_to_refresh):
-    list_time_during_experiment = []
     # id of the visualize image thread
     jobs_id = []
 
@@ -61,10 +60,10 @@ def interface(list_classes_user, list_class_original, list_file, list_time, df, 
             jobs_id.append(window.after(0, change_image))
 
     def cancel():
-        for id in jobs_id:
-            window.after_cancel(id)
+        for job in jobs_id:
+            window.after_cancel(job)
 
-    get_radio_button(window, selected, clicked, labels = ['computerroom', 'movietheater', 'library', 'kitchen', 'bowling', 'poolinside', 'trainstation', 'greenhouse'])
+    get_radio_button(window, selected, clicked, labels=['computerroom', 'movietheater', 'library', 'kitchen', 'bowling', 'poolinside', 'trainstation', 'greenhouse'])
 
     """
     - To change the image
@@ -98,13 +97,12 @@ def interface(list_classes_user, list_class_original, list_file, list_time, df, 
     change_image()
     window.mainloop()
 
-
 def get_radio_button(window, selected, clicked, labels):
     i = 0
     pos_col = 3
-    for l in labels:
-        b = Radiobutton(window, text=l, variable=selected, bg='#BBDEF0', font="System 18 bold", value=l, command=clicked)
-        tempo = 0
+    temp = 0
+    for label in labels:
+        b = Radiobutton(window, text=label, variable=selected, bg='#BBDEF0', font="System 18 bold", value=label, command=clicked)
 
         if mod(i, 2) == 0:
             b.grid(column=0, row=pos_col, sticky=W)
@@ -112,5 +110,4 @@ def get_radio_button(window, selected, clicked, labels):
         else:
             b.grid(column=1, row=temp, sticky=W)
             pos_col = pos_col + 1
-
         i = i + 1
