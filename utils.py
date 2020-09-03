@@ -95,7 +95,7 @@ def interface(list_classes_user, list_class_original, list_file, list_time, df, 
         if len(list_class_original) == 2000:
             window.destroy()
         else:
-            row = df.loc[random.randint(0, len(df)), :]
+            row = df.loc[random.randint(0, len(df)-1), :]
             """Annotate the img"""
             list_class_original.append(row[col_class])
             list_file.append(row[col_name_file])
