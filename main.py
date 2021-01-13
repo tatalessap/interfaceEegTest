@@ -13,7 +13,8 @@ col_name_file = 'name_file'
 col_class = 'class'
 path_folder_img = 'ALL/'
 
+
 # time_to_refresh, time_to_black
-annotate(df, col_name_file, col_class, path_folder_img, 7000, name_file="2settElisa_second")
+annotate(df, col_name_file, col_class, path_folder_img, 7000, name_file="1novMarco")
 
 i=0
